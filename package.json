@@ -1,0 +1,14 @@
+{
+    "name":"RadiantQGanttInRequireJS",
+    "title":"RadiantQ Gantt In RequireJS",
+    "description":"Creating the simple Gantt using RequireJS",
+    "version":"1.1.0",
+    "dependencies":{
+        "express":"3.x"
+    },
+    "devDependencies":{
+        "express":"3.x"
+    },
+    "main":"./server",
+    "keywords":["Require.js"]
+}

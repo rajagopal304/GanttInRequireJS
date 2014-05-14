@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>FlexyGanttSkeleton</title>
+    <link href="css/initGanttStyles.css" rel="stylesheet" />
+    <script data-main="Scripts/app/main.js" src="Scripts/libs/require.js"></script>
+    <script>
+		requirejs.config({
+			"baseUrl": "Scripts/app",
+			"paths": {
+				"jquery": "../libs/GanttDeps/jquery-1.9.1.min",
+				"jquery-ui": "../libs/GanttDeps/jquery-ui-1.10.3/jquery-ui.min",
+				"jquery.layout": "../libs/GanttDeps/jquery.layout-latest.min",
+				"jquery.tmpl": "../libs/GanttDeps/jquery.tmpl",
+				"jquery.ui.grid": "../libs/GanttDeps/JQGrid/jquery.ui.grid",
+				"jquery.i18n": "../libs/GanttDeps/jquery.i18n.properties-min-1.0.9",
+				"dateJS": "../libs/GanttDeps/Utils/date",
+				"EditExtenstion": "EditExtenstion",
+				"jquery.contextMenu": "../libs/GanttDeps/jquery.contextMenu",
+				"RadiantQ": "../libs/RadiantQ-jQuery.Gantt.4.0.2.trial.min"
+			},
+			"shim": {
+				"jquery-ui": ["jquery"],
+				"jquery.layout": ["jquery", "jquery-ui"],
+				"jquery.tmpl": ["jquery"],
+				"jquery.ui.grid": ["jquery", "jquery-ui"],
+				"jquery.i18n": ["jquery", "jquery-ui"],
+				"EditExtenstion": ["jquery", "jquery-ui", "dateJS"],
+				"jquery.contextMenu": ["jquery", "jquery-ui"],
+				"RadiantQ": ["jquery", "jquery-ui", "jquery.layout", "jquery.tmpl", "jquery.ui.grid", "jquery.i18n", "dateJS", "EditExtenstion", "jquery.contextMenu"]
+			}
+		});
+    </script>
+</head>
+<body>
+    <div id="pagecontent" style="height: 600px;">
+        <!-- Div that will be transformed into the FlexyGantt widget above.-->
+        <div id="gantt_container" style="height: 100%;">
+        </div>
+    </div>
+    <!-- This table contains the column definitions for the table on the left of the FlexyGantt. -->
+    <table id="flexyTable">
+        <thead>
+            <tr>
+                <th data-editor="expandableTextBox" data-template="#namecolumn-tmpl">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <!--The template for the name column. -->
+    <script id="namecolumn-tmpl" type="text/x-jquery-tmpl">
+        <td class="ui-widget-content">
+            <div class="rq-grid-nameCol">
+            </div>
+        </td>
+    </script>
+    <!--The template for the custom tooltip. -->
+    <script id="TaskTooltipTemplate" type="text/x-jquery-tmpl">
+        <div class='TaskTooltip'>
+            <div align='center'>Name: ${nameConverter()}</div>
+            <div>
+                <span>StartTime : ${startTimeTooltipConverter()}
+                </span></br>
+				<span>EndTime : ${endTimeTooltipConverter()}
+                </span>
+            </div>
+        </div>
+    </script>
+    <script>
+        // to get the name from the bounded list
+        function nameConverter(flexyNodeData) {
+            var data;
+            // The grid calls this converter with flexyNodeData as a arg.
+            if (flexyNodeData)
+                data = flexyNodeData.Data();
+                // The grid calls this converter with flexyNodeData as a datacontext.
+            else
+                data = this.data;
+            if (data["TName"])
+                return data["TName"];
+            else if (data["RName"])
+                return data["RName"];
+            else if (data["TaskName"])
+                return data["TaskName"];
+
+            return;
+        };
+        // to get the short time format.
+        function startTimeTooltipConverter() {
+            var toolTipDateformat = Date.CultureInfo.formatPatterns.shortDate + '  ' + "HH:mm:ss";
+            if (this.data["PStartTime"])
+                return this.data["PStartTime"].toString(toolTipDateformat);
+            else if (this.data["StartTime"])
+                return this.data["StartTime"].toString(toolTipDateformat);
+
+            return null;
+        }
+
+        function endTimeTooltipConverter() {
+            var toolTipDateformat = Date.CultureInfo.formatPatterns.shortDate + '  ' + "HH:mm:ss";
+            if (this.data["PEndTime"])
+                return this.data["PEndTime"].toString(toolTipDateformat);
+            else if (this.data["EndTime"])
+                return this.data["EndTime"].toString(toolTipDateformat);
+
+            return null;
+        }
+    </script>
+</body>
+</html>
